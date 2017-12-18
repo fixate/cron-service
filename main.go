@@ -20,11 +20,16 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Action = run
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:   "key-file",
-			Usage:  "optional keyfile to use for pub sub",
-			EnvVar: "CRON_KEYFILE",
+		cli.BoolFlag{
+			Name:  "ensure-topics-created",
+			Usage: "Create pubsub topics if they don't exist",
 		},
+		cli.StringFlag{
+			Name:   "project-id",
+			Usage:  "project id",
+			EnvVar: "CRON_GOOG_PROJECT_ID",
+		},
+
 		cli.StringFlag{
 			Name:   "m, manifest-path",
 			Usage:  "cron.yaml manifest file",
@@ -44,5 +49,10 @@ func run(c *cli.Context) error {
 		return err
 	}
 
-	return cron.Run(manifest)
+	err, crn := cron.New(c, manifest)
+	if err != nil {
+		return err
+	}
+	crn.Run()
+	return nil
 }

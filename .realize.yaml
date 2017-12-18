@@ -3,7 +3,7 @@ settings:
     force: false
     interval: 0s
 schema:
-- name: cron-pubsub
+- name: cron-server
   path: .
   commands:
     build:
@@ -17,5 +17,5 @@ schema:
     - .git
     - .realize
     - vendor
-    - cron-pubsub
-    - cron-pubsub-go-tmp-umask
+    - cron-server
+    - cron-server-go-tmp-umask

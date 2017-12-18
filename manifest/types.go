@@ -1,7 +1,8 @@
 package manifest
 
 type PubSubDef struct {
-	Topic string `yaml:topic`
+	Topic   string `yaml:topic`
+	Message string `yaml:message`
 }
 
 type Header struct {

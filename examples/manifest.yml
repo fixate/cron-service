@@ -1,8 +1,9 @@
 ---
-- description: every 1 second
-  schedule: "@every 1s"
+- description: every 10 seconds
+  schedule: "@every 2s"
   pubsub:
-    topic: cron:hourly
+    topic: cron.hourly
+    message: '{}'
 
 - description: every one minute
   schedule: "@every 1m"
