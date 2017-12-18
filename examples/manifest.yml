@@ -1,0 +1,17 @@
+---
+- description: every 1 second
+  schedule: "@every 1s"
+  pubsub:
+    topic: cron:hourly
+
+- description: every one minute
+  schedule: "@every 1m"
+  request:
+    url: http://my-service/cron/hourly
+    method: POST
+    headers:
+      - name: Authenticate
+        value: my-super-long-secret-key
+    body: >
+      {"user": "Foo"}
+

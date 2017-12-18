@@ -1,0 +1,21 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+- name: cron-pubsub
+  path: .
+  commands:
+    build:
+      status: true
+  watcher:
+    paths:
+    - /
+    extensions:
+    - go
+    ignored_paths:
+    - .git
+    - .realize
+    - vendor
+    - cron-pubsub
+    - cron-pubsub-go-tmp-umask
