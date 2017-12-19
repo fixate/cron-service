@@ -1,48 +1,62 @@
 package pubsub
 
 import (
-	"encoding/base64"
-	"golang.org/x/net/context"
+	"log"
 
-	//"cloud.google.com/go/iam"
-	"cloud.google.com/go/pubsub"
+	mfst "github.com/fixate/cron-server/manifest"
+	"github.com/urfave/cli"
 )
 
-type pubSub struct {
-	client *pubsub.Client
+type PubSubProvider struct {
+	cli    *cli.Context
+	client *pubSubClient
+
+	Task *mfst.CronTaskDef
 }
 
-func NewClient(projectId string) (error, *pubSub) {
-	ctx := context.Background()
-	client, err := pubsub.NewClient(ctx, projectId)
-	if err != nil {
-		return err, nil
+func NewProvider(cli *cli.Context, task *mfst.CronTaskDef) *PubSubProvider {
+	return &PubSubProvider{
+		cli:  cli,
+		Task: task,
+	}
+}
+
+func (p *PubSubProvider) ensureTopics() error {
+	task := p.Task
+	if err, _ := p.client.EnsureTopic(task.PubSub.Topic); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PubSubProvider) Setup() error {
+	projectId := p.cli.String("project-id")
+	var client *pubSubClient
+	var err error
+	if err, client = NewClient(projectId); err != nil {
+		return err
 	}
 
-	return nil, &pubSub{client}
-}
+	p.client = client
 
-func (p *pubSub) CreateTopic(topicName string) (err error, topic *pubsub.Topic) {
-	ctx := context.Background()
-	topic, err = p.client.CreateTopic(ctx, topicName)
-	return
-}
-
-func (p *pubSub) Publish(topic string, msg string) (error, string) {
-	t := p.client.Topic(topic)
-	ctx := context.Background()
-	encodedMsg := make([]byte, base64.StdEncoding.EncodedLen(len(msg)))
-	base64.StdEncoding.Encode(encodedMsg, []byte(msg))
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: encodedMsg,
-	})
-
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
-	if err != nil {
-		return err, id
+	if err := p.ensureTopics(); err != nil {
+		return err
 	}
+	return nil
+}
 
-	return nil, id
+func (p *PubSubProvider) Handler() func() {
+	var task mfst.CronTaskDef = *p.Task
+	ps := task.PubSub
+	return func() {
+		log.Printf("[PUBSUB] Task start: '%s'\n", task.Description)
+
+		log.Printf("[PUBSUB] Publishing topic: '%s'\n", ps.Topic)
+		err, id := p.client.Publish(ps.Topic, ps.Message)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("Published a message; msg ID: %v\n", id)
+	}
 }

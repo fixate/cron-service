@@ -1,4 +1,4 @@
-.PHONY: all deps fmt vet test builddev
+.PHONY: all deps fmt vet test builddev develop
 
 EXECUTABLE ?= drone-secrets
 IMAGE ?= fixate/$(EXECUTABLE):latest
@@ -26,5 +26,11 @@ $(EXECUTABLE): $(wildcard *.go)
 
 builddev:
 	go build -ldflags '-s -w $(LDFLAGS)'
+
+develop:
+	realize start --build
+
+rundev:
+	./cron-server -m examples/manifest.yml --project-id digibet-dev-186112 --ensure-topics-created
 
 build: $(EXECUTABLE)

@@ -1,14 +1,15 @@
 ---
 - description: every 10 seconds
   schedule: "@every 2s"
+  enabled: false
   pubsub:
     topic: cron.hourly
     message: '{}'
 
 - description: every one minute
-  schedule: "@every 1m"
+  schedule: "@every 10s"
   request:
-    url: http://my-service/cron/hourly
+    url: http://fixate.it/
     method: POST
     headers:
       - name: Authenticate

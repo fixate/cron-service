@@ -6,8 +6,8 @@ type PubSubDef struct {
 }
 
 type Header struct {
-	name  string `yaml:name`
-	value string `yaml:value`
+	Name  string `yaml:name`
+	Value string `yaml:value`
 }
 
 type RequestDef struct {
@@ -19,9 +19,21 @@ type RequestDef struct {
 
 type CronTaskDef struct {
 	Description string      `yaml:description`
+	Enabled     bool        `yaml:enabled`
 	Schedule    string      `yaml:schedule`
 	PubSub      *PubSubDef  `yaml:subsub`
 	Request     *RequestDef `yaml:request`
 }
 
 type CronManifest []CronTaskDef
+
+func (c *CronTaskDef) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	type localAlias CronTaskDef
+	obj := localAlias{Enabled: true}
+	if err := unmarshal(&obj); err != nil {
+		return err
+	}
+
+	*c = CronTaskDef(obj)
+	return nil
+}
