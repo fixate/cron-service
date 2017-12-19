@@ -3,7 +3,7 @@ package pubsub
 import (
 	"log"
 
-	mfst "github.com/fixate/cron-server/manifest"
+	mfst "github.com/fixate/cron-service/manifest"
 	"github.com/urfave/cli"
 )
 

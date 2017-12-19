@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/fixate/cron-server/cron"
-	mfst "github.com/fixate/cron-server/manifest"
+	"github.com/fixate/cron-service/cron"
+	mfst "github.com/fixate/cron-service/manifest"
 
 	"github.com/urfave/cli"
 )

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	mfst "github.com/fixate/cron-server/manifest"
-	"github.com/fixate/cron-server/pubsub"
-	"github.com/fixate/cron-server/request"
+	mfst "github.com/fixate/cron-service/manifest"
+	"github.com/fixate/cron-service/pubsub"
+	"github.com/fixate/cron-service/request"
 
 	"github.com/robfig/cron"
 	"github.com/urfave/cli"

@@ -1,6 +1,6 @@
 .PHONY: all deps fmt vet test builddev develop
 
-EXECUTABLE ?= drone-secrets
+EXECUTABLE ?= cron-service
 IMAGE ?= fixate/$(EXECUTABLE):latest
 COMMIT ?= $(shell git rev-parse --short HEAD)
 
@@ -23,6 +23,9 @@ test:
 
 $(EXECUTABLE): $(wildcard *.go)
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w $(LDFLAGS)'
+
+docker: $(EXECUTABLE)
+	docker build -t $(IMAGE) .
 
 builddev:
 	go build -ldflags '-s -w $(LDFLAGS)'
