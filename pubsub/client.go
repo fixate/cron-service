@@ -1,11 +1,12 @@
 package pubsub
 
 import (
-	"encoding/base64"
 	"golang.org/x/net/context"
 
 	//"cloud.google.com/go/iam"
 	"cloud.google.com/go/pubsub"
+
+	mfst "github.com/fixate/cron-service/manifest"
 )
 
 type pubSubClient struct {
@@ -32,13 +33,12 @@ func (p *pubSubClient) EnsureTopic(topicName string) (err error, topic *pubsub.T
 	return
 }
 
-func (p *pubSubClient) Publish(topic string, msg string) (error, string) {
-	t := p.client.Topic(topic)
+func (p *pubSubClient) Publish(ps *mfst.PubSubDef) (error, string) {
+	t := p.client.Topic(ps.Topic)
 	ctx := context.Background()
-	encodedMsg := make([]byte, base64.StdEncoding.EncodedLen(len(msg)))
-	base64.StdEncoding.Encode(encodedMsg, []byte(msg))
 	result := t.Publish(ctx, &pubsub.Message{
-		Data: encodedMsg,
+		Data:       []byte(ps.Message),
+		Attributes: ps.Attributes,
 	})
 
 	// Block until the result is returned and a server-generated

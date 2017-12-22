@@ -33,7 +33,7 @@ builddev:
 develop:
 	realize start --build
 
-rundev:
-	./cron-server -m examples/manifest.yml --project-id digibet-dev-186112 --ensure-topics-created
+runexample:
+	./cron-service -m examples/manifest.yml --project-id digibet-dev-186112 --ensure-topics-created
 
 build: $(EXECUTABLE)

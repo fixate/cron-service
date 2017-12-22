@@ -3,8 +3,9 @@ package pubsub
 import (
 	"log"
 
-	mfst "github.com/fixate/cron-service/manifest"
 	"github.com/urfave/cli"
+
+	mfst "github.com/fixate/cron-service/manifest"
 )
 
 type PubSubProvider struct {
@@ -52,7 +53,7 @@ func (p *PubSubProvider) Handler() func() {
 		log.Printf("[PUBSUB] Task start: '%s'\n", task.Description)
 
 		log.Printf("[PUBSUB] Publishing topic: '%s'\n", ps.Topic)
-		err, id := p.client.Publish(ps.Topic, ps.Message)
+		err, id := p.client.Publish(ps)
 		if err != nil {
 			log.Fatal(err)
 		}

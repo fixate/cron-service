@@ -1,10 +1,12 @@
 ---
 - description: every 10 seconds
-  schedule: "@every 2s"
-  enabled: false
+  schedule: "@every 1s"
   pubsub:
     topic: cron.hourly
-    message: '{}'
+    message: '{"testing": true}'
+    attributes:
+      truly: 'an'
+      attribute: true
 
 - description: every one minute
   schedule: "@every 10s"
