@@ -5,6 +5,6 @@ FROM alpine:3.2
     #ca-certificates && \
   #rm -rf /var/cache/apk/*
 
-COPY cron-server /bin
+COPY cron-service /bin
 
-ENTRYPOINT ["/bin/cron-server"]
+ENTRYPOINT ["/bin/cron-service"]
