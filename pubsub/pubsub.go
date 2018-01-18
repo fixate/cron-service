@@ -52,7 +52,6 @@ func (p *PubSubProvider) Handler() func() {
 	return func() {
 		log.Printf("[PUBSUB] Task start: '%s'\n", task.Description)
 
-		log.Printf("[PUBSUB] Publishing topic: '%s'\n", ps.Topic)
 		err, id := p.client.Publish(ps)
 		if err != nil {
 			log.Fatal(err)

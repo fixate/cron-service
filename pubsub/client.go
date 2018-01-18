@@ -2,6 +2,7 @@ package pubsub
 
 import (
 	"golang.org/x/net/context"
+	"log"
 
 	//"cloud.google.com/go/iam"
 	"cloud.google.com/go/pubsub"
@@ -35,9 +36,15 @@ func (p *pubSubClient) EnsureTopic(topicName string) (err error, topic *pubsub.T
 
 func (p *pubSubClient) Publish(ps *mfst.PubSubDef) (error, string) {
 	t := p.client.Topic(ps.Topic)
+
+	log.Printf("[PUBSUB] Publishing topic: '%s'\n", t)
 	ctx := context.Background()
+	data := []byte(ps.Message)
+	if len(data) == 0 {
+		data = []byte{0}
+	}
 	result := t.Publish(ctx, &pubsub.Message{
-		Data:       []byte(ps.Message),
+		Data:       data,
 		Attributes: ps.Attributes,
 	})
 
