@@ -39,6 +39,7 @@ func (p *PubSubProvider) Setup() error {
 	projectId := p.cli.String("project-id")
 	var client *pubSubClient
 	var err error
+	log.Printf("[%s] Creating Client for project %s.\n", p.Name(), projectId)
 	if err, client = NewClient(projectId); err != nil {
 		return err
 	}
