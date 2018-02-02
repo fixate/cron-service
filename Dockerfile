@@ -7,4 +7,4 @@ FROM alpine:3.2
 
 COPY cron-service /bin
 
-ENTRYPOINT ["/bin/cron-service"]
+CMD ["/bin/cron-service"]

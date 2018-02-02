@@ -35,12 +35,6 @@ func main() {
 			Usage:  "cron.yaml manifest file",
 			EnvVar: "CRON_MANIFEST_PATH",
 		},
-
-		cli.StringFlag{
-			Name:   "pubsub-emulator-host",
-			Usage:  "Use the pubsub emulator",
-			EnvVar: "PUBSUB_EMULATOR_HOST",
-		},
 	}
 
 	if err := app.Run(os.Args); err != nil {

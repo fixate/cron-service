@@ -22,11 +22,16 @@ func NewProvider(cli *cli.Context, task *mfst.CronTaskDef) *PubSubProvider {
 	}
 }
 
+func (p *PubSubProvider) Name() string {
+	return "PUBSUB"
+}
+
 func (p *PubSubProvider) ensureTopics() error {
 	task := p.Task
 	if err, _ := p.client.EnsureTopic(task.PubSub.Topic); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -37,12 +42,14 @@ func (p *PubSubProvider) Setup() error {
 	if err, client = NewClient(projectId); err != nil {
 		return err
 	}
+	log.Printf("[%s] New Client created.\n", p.Name())
 
 	p.client = client
 
 	if err := p.ensureTopics(); err != nil {
 		return err
 	}
+	log.Printf("[%s] Setup complete.\n", p.Name())
 	return nil
 }
 

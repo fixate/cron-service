@@ -35,6 +35,7 @@ func (c *Cron) Run() {
 }
 
 type ActionProvider interface {
+	Name() string
 	Setup() error
 	Handler() func()
 }
@@ -57,25 +58,21 @@ func (crn *Cron) setupTasks() error {
 			log.Printf("SKIPPING task '%s'. It is not enabled.\n", task.Description)
 			continue
 		}
-		log.Printf("Adding task '%s'.\n", task.Description)
 
 		provider := crn.getProviderForTask(&task)
 		if provider == nil {
 			return fmt.Errorf("Invalid manifest. Specify pubsub or request for cron task '%s'\n", task.Description)
 		}
+		log.Printf("[%s] Adding task '%s'.\n", provider.Name(), task.Description)
 
 		if err := provider.Setup(); err != nil {
+			log.Fatal(err)
 			return err
 		}
+
+		log.Printf("[%s] Schedule '%s'.\n", provider.Name(), task.Schedule)
 
 		crn.cron.AddFunc(task.Schedule, provider.Handler())
 	}
 	return nil
-}
-
-func (c *Cron) newRequestHandler(task mfst.CronTaskDef) func() {
-	return func() {
-		log.Printf("[REQUEST] Task start: '%s'\n", task.Description)
-		// TODO
-	}
 }

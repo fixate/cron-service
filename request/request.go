@@ -23,6 +23,10 @@ func NewProvider(cli *cli.Context, task *mfst.CronTaskDef) *HttpRequestProvider 
 	}
 }
 
+func (p *HttpRequestProvider) Name() string {
+	return "REQUEST"
+}
+
 func (p *HttpRequestProvider) Setup() error {
 	p.client = &http.Client{}
 	return nil

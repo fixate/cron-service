@@ -28,8 +28,11 @@ func (p *pubSubClient) EnsureTopic(topicName string) (err error, topic *pubsub.T
 	ctx := context.Background()
 	topic, err = p.client.CreateTopic(ctx, topicName)
 	if err != nil {
+		log.Printf("[PUBSUB CLIENT] '%s' topic exists.\n", topicName)
 		topic = p.client.Topic(topicName)
 		err = nil
+	} else {
+		log.Printf("[PUBSUB CLIENT] '%s' topic created.\n", topicName)
 	}
 	return
 }
@@ -37,7 +40,7 @@ func (p *pubSubClient) EnsureTopic(topicName string) (err error, topic *pubsub.T
 func (p *pubSubClient) Publish(ps *mfst.PubSubDef) (error, string) {
 	t := p.client.Topic(ps.Topic)
 
-	log.Printf("[PUBSUB] Publishing topic: '%s'\n", t)
+	log.Printf("[PUBSUB CLIENT] Publishing message to topic: '%s'\n", t)
 	ctx := context.Background()
 	data := []byte(ps.Message)
 	if len(data) == 0 {
