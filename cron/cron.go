@@ -30,7 +30,7 @@ func New(c *cli.Context, manifest mfst.CronManifest) (error, *Cron) {
 }
 
 func (c *Cron) Run() {
-	log.Println("Cron process started")
+	log.Println("Cron process starting")
 	c.cron.Run()
 }
 
@@ -72,7 +72,14 @@ func (crn *Cron) setupTasks() error {
 
 		log.Printf("[%s] Schedule '%s'.\n", provider.Name(), task.Schedule)
 
-		crn.cron.AddFunc(task.Schedule, provider.Handler())
+		log.Printf("[%s] debug fireOnStart=%t.\n", provider.Name(), task.FireOnStart)
+		handler := provider.Handler()
+		if task.FireOnStart {
+			log.Printf("[%s] Fire On Start.\n", provider.Name())
+			go handler()
+		}
+
+		crn.cron.AddFunc(task.Schedule, handler)
 	}
 	return nil
 }

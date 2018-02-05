@@ -1,4 +1,10 @@
 ---
+- description: PubSub tick every day
+  schedule: "@every 1d"
+  fireonstart: true
+  pubsub:
+    topic: tick.daily
+
 - description: every 10 seconds
   schedule: "@every 10s"
   enabled: false
@@ -11,6 +17,7 @@
 
 - description: Cron tick for refreshing cache
   schedule: "@every 1h"
+  enabled: false
   pubsub:
     topic: cron.tick.refresh-cache
 

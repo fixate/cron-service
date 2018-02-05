@@ -21,6 +21,7 @@ type RequestDef struct {
 type CronTaskDef struct {
 	Description string      `yaml:description`
 	Enabled     bool        `yaml:enabled`
+	FireOnStart bool        `yaml:fireonstart`
 	Schedule    string      `yaml:schedule`
 	PubSub      *PubSubDef  `yaml:subsub`
 	Request     *RequestDef `yaml:request`
