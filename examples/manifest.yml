@@ -7,7 +7,7 @@
 
 - description: every 10 seconds
   schedule: "@every 10s"
-  enabled: false
+  enabled: true
   pubsub:
     topic: cron.hourly
     message: '{"testing": true}'
@@ -17,13 +17,13 @@
 
 - description: Cron tick for refreshing cache
   schedule: "@every 1h"
-  enabled: false
+  enabled: true
   pubsub:
     topic: cron.tick.refresh-cache
 
 - description: every one minute
   schedule: "@every 1m"
-  enabled: false
+  enabled: true
   request:
     url: http://fixate.it/
     method: POST

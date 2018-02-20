@@ -11,7 +11,8 @@ import (
 )
 
 type pubSubClient struct {
-	client *pubsub.Client
+	context context.Context
+	client  *pubsub.Client
 }
 
 func NewClient(projectId string) (error, *pubSubClient) {
@@ -21,12 +22,11 @@ func NewClient(projectId string) (error, *pubSubClient) {
 		return err, nil
 	}
 
-	return nil, &pubSubClient{client}
+	return nil, &pubSubClient{ctx, client}
 }
 
 func (p *pubSubClient) EnsureTopic(topicName string) (err error, topic *pubsub.Topic) {
-	ctx := context.Background()
-	topic, err = p.client.CreateTopic(ctx, topicName)
+	topic, err = p.client.CreateTopic(p.context, topicName)
 	if err != nil {
 		log.Printf("[PUBSUB CLIENT] '%s' topic exists.\n", topicName)
 		topic = p.client.Topic(topicName)
@@ -37,23 +37,24 @@ func (p *pubSubClient) EnsureTopic(topicName string) (err error, topic *pubsub.T
 	return
 }
 
-func (p *pubSubClient) Publish(ps *mfst.PubSubDef) (error, string) {
-	t := p.client.Topic(ps.Topic)
+func (p *pubSubClient) Topic(topicName string) *pubsub.Topic {
+	return p.client.Topic(topicName)
+}
 
-	log.Printf("[PUBSUB CLIENT] Publishing message to topic: '%s'\n", t)
-	ctx := context.Background()
+func (p *pubSubClient) Publish(topic *pubsub.Topic, ps *mfst.PubSubDef) (error, string) {
+	log.Printf("[PUBSUB CLIENT] Publishing message to topic: '%s'\n", topic)
 	data := []byte(ps.Message)
 	if len(data) == 0 {
 		data = []byte{0}
 	}
-	result := t.Publish(ctx, &pubsub.Message{
+	result := topic.Publish(p.context, &pubsub.Message{
 		Data:       data,
 		Attributes: ps.Attributes,
 	})
 
 	// Block until the result is returned and a server-generated
 	// ID is returned for the published message.
-	id, err := result.Get(ctx)
+	id, err := result.Get(p.context)
 	if err != nil {
 		return err, id
 	}

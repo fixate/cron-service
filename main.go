@@ -8,11 +8,16 @@ import (
 	mfst "github.com/fixate/cron-service/manifest"
 
 	"github.com/urfave/cli"
+	//"net/http"
+	//_ "net/http/pprof"
 )
 
 const version string = "1.0.0"
 
 func main() {
+	//go func() {
+	//log.Println(http.ListenAndServe("localhost:6060", nil))
+	//}()
 	app := cli.NewApp()
 	app.Name = "Cron service"
 	app.Version = version

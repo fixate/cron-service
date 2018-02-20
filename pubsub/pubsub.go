@@ -57,10 +57,11 @@ func (p *PubSubProvider) Setup() error {
 func (p *PubSubProvider) Handler() func() {
 	var task mfst.CronTaskDef = *p.Task
 	ps := task.PubSub
+	topic := p.client.Topic(ps.Topic)
 	return func() {
 		log.Printf("[PUBSUB] Task start: '%s'\n", task.Description)
 
-		err, id := p.client.Publish(ps)
+		err, id := p.client.Publish(topic, ps)
 		if err != nil {
 			log.Fatal(err)
 		}
