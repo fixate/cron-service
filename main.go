@@ -12,7 +12,7 @@ import (
 	//_ "net/http/pprof"
 )
 
-const version string = "1.0.0"
+const version string = "0.2.0"
 
 func main() {
 	//go func() {

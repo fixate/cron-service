@@ -1,7 +1,7 @@
 .PHONY: all deps fmt vet test builddev develop
 
 EXECUTABLE ?= cron-service
-IMAGE ?= fixate/$(EXECUTABLE):0.1.2
+IMAGE ?= fixate/$(EXECUTABLE):0.2.0
 COMMIT ?= $(shell git rev-parse --short HEAD)
 
 LDFLAGS = -X "main.buildCommit=$(COMMIT)"
