@@ -6,10 +6,15 @@ schema:
 - name: cron-server
   path: .
   commands:
-    build:
-      status: true
     run:
       status: true
+  args:
+    - -m
+    - examples/manifest.yml
+    - --project-id
+    - your-project-id
+    - --credentials-file
+    - /your/service-account-json-file/here
   watcher:
     paths:
     - /
