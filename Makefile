@@ -1,7 +1,7 @@
 .PHONY: all deps fmt vet test builddev develop
 
 EXECUTABLE ?= cron-service
-IMAGE ?= fixate/$(EXECUTABLE):0.2.0
+IMAGE ?= fixate/$(EXECUTABLE):0.3.0
 COMMIT ?= $(shell git rev-parse --short HEAD)
 
 LDFLAGS = -X "main.buildCommit=$(COMMIT)"
@@ -25,6 +25,7 @@ $(EXECUTABLE): $(wildcard *.go)
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w $(LDFLAGS)'
 
 docker: $(EXECUTABLE)
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w $(LDFLAGS)'
 	docker build -t $(IMAGE) .
 
 builddev:
