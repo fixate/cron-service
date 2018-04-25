@@ -48,8 +48,10 @@ func (p *PubSubProvider) Setup() error {
 
 	p.client = client
 
-	if err := p.ensureTopics(); err != nil {
-		return err
+	if p.cli.Bool("ensure-topics-created") {
+		if err := p.ensureTopics(); err != nil {
+			return err
+		}
 	}
 	log.Printf("[%s] Setup complete.\n", p.Name())
 	return nil
