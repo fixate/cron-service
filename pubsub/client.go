@@ -20,6 +20,7 @@ func NewClient(projectId string, credentialsFile string) (error, *pubSubClient) 
 	var client *pubsub.Client
 	var err error
 	if len(credentialsFile) > 0 {
+		log.Printf("Using credentials at %s\n", credentialsFile)
 		clientOptions := option.WithCredentialsFile(credentialsFile)
 		client, err = pubsub.NewClient(ctx, projectId, clientOptions)
 
@@ -30,6 +31,7 @@ func NewClient(projectId string, credentialsFile string) (error, *pubSubClient) 
 		return nil, &pubSubClient{ctx, client}
 	}
 
+	log.Println("Using default credentials\n", credentialsFile)
 	client, err = pubsub.NewClient(ctx, projectId)
 
 	if err != nil {
