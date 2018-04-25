@@ -4,8 +4,8 @@ import (
 	"golang.org/x/net/context"
 	"log"
 
-	//"cloud.google.com/go/iam"
 	"cloud.google.com/go/pubsub"
+	"google.golang.org/api/option"
 
 	mfst "github.com/fixate/cron-service/manifest"
 )
@@ -15,9 +15,25 @@ type pubSubClient struct {
 	client  *pubsub.Client
 }
 
-func NewClient(projectId string) (error, *pubSubClient) {
+func NewClient(projectId string, credentialsFile string) (error, *pubSubClient) {
 	ctx := context.Background()
-	client, err := pubsub.NewClient(ctx, projectId)
+	var client *pubsub.Client
+	var err error
+	if len(credentialsFile) > 0 {
+		log.Printf("Using credentials at %s\n", credentialsFile)
+		clientOptions := option.WithCredentialsFile(credentialsFile)
+		client, err = pubsub.NewClient(ctx, projectId, clientOptions)
+
+		if err != nil {
+			return err, nil
+		}
+
+		return nil, &pubSubClient{ctx, client}
+	}
+
+	log.Println("Using default credentials\n", credentialsFile)
+	client, err = pubsub.NewClient(ctx, projectId)
+
 	if err != nil {
 		return err, nil
 	}

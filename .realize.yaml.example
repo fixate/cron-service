@@ -6,8 +6,15 @@ schema:
 - name: cron-server
   path: .
   commands:
-    build:
+    run:
       status: true
+  args:
+    - -m
+    - examples/manifest.yml
+    - --project-id
+    - your-project-id
+    - --credentials-file
+    - /your/service-account-json-file/here
   watcher:
     paths:
     - /
@@ -17,5 +24,5 @@ schema:
     - .git
     - .realize
     - vendor
-    - cron-server
-    - cron-server-go-tmp-umask
+    - cron-service
+    - cron-service-go-tmp-umask

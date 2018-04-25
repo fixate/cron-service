@@ -37,18 +37,21 @@ func (p *PubSubProvider) ensureTopics() error {
 
 func (p *PubSubProvider) Setup() error {
 	projectId := p.cli.String("project-id")
+	credentialsFile := p.cli.String("credentials-file")
 	var client *pubSubClient
 	var err error
 	log.Printf("[%s] Creating Client for project %s.\n", p.Name(), projectId)
-	if err, client = NewClient(projectId); err != nil {
+	if err, client = NewClient(projectId, credentialsFile); err != nil {
 		return err
 	}
 	log.Printf("[%s] New Client created.\n", p.Name())
 
 	p.client = client
 
-	if err := p.ensureTopics(); err != nil {
-		return err
+	if p.cli.Bool("ensure-topics-created") {
+		if err := p.ensureTopics(); err != nil {
+			return err
+		}
 	}
 	log.Printf("[%s] Setup complete.\n", p.Name())
 	return nil
