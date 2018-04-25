@@ -8,6 +8,8 @@ schema:
   commands:
     build:
       status: true
+    run:
+      status: true
   watcher:
     paths:
     - /
@@ -17,5 +19,5 @@ schema:
     - .git
     - .realize
     - vendor
-    - cron-server
-    - cron-server-go-tmp-umask
+    - cron-service
+    - cron-service-go-tmp-umask

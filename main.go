@@ -34,7 +34,11 @@ func main() {
 			Usage:  "project id",
 			EnvVar: "CRON_GOOG_PROJECT_ID",
 		},
-
+		cli.StringFlag{
+			Name:   "credentials-file",
+			Usage:  "Service account or refresh token JSON credentials file",
+			EnvVar: "CRON_CREDENTIALS_FILE",
+		},
 		cli.StringFlag{
 			Name:   "m, manifest-path",
 			Usage:  "cron.yaml manifest file",
