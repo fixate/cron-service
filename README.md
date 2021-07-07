@@ -5,7 +5,7 @@ intervals
 
 ### Install:
 
-See [releases](https://github.com/fixate/drone-secrets/releases/latest) or build repo using `make build` or `make builddev`
+See [releases](https://github.com/fixate/cron-service/releases/latest) or build repo using `make build` or `make builddev`
 
 TODO:
 
